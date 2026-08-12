@@ -1,4 +1,9 @@
 const pet = require("../models/pet");
+/**
+ * @desc    Create a new pet
+ * @route   POST /api/pets
+ * @access  Public
+ */
 
 const createPet = async (req,res) => {
     try{
