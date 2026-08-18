@@ -1,9 +1,4 @@
 const pet = require("../models/pet");
-/**
- * @desc    Create a new pet
- * @route   POST /api/pets
- * @access  Public
- */
 
 const createPet = async (req,res) => {
     try{
@@ -14,7 +9,15 @@ const createPet = async (req,res) => {
         const newPet = await pet.create({
             
         })
-    }catch{
+    }catch(error){
+        console.error(error);
+
+        res.status(500).json({
+            message:error.message || "Something went wrong", });
 
     }
-}
+};
+
+module.exports = {
+    createPet,
+};
