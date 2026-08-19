@@ -8,12 +8,12 @@ const createPet = async (req,res) => {
         }
         const newPet = await pet.create({
             
-        })
+        });
+        res.status(201).json(newPet);
     }catch(error){
         console.error(error);
 
-        res.status(500).json({
-            message:error.message || "Something went wrong", });
+        res.status(500).json({message:error.message || "Something went wrong", });
 
     }
 };
