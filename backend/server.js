@@ -4,6 +4,9 @@ const express = require("express");
 const dns = require("dns");
 const authController = require("./controllers/authController");
 const authenticate = require("./middleware/authMiddleware");
+const authRoutes = require("./routes/authRoutes");
+const petRoutes = require("./routes/petRoutes");
+
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 mongoose
@@ -13,6 +16,9 @@ mongoose
 
 const app = express();
 app.use(express.json());
+
+app.use("/api/auth", authRoutes);
+app.use("/api/pets", petRoutes);
 
 const getUser = async (req, res) => {
   try {
@@ -24,11 +30,6 @@ const getUser = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-app.get("/api/me", authenticate, getUser);
-
-app.post("/api/register", authController.register);
-app.post("/api/login", authController.login);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
