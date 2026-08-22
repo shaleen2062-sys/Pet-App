@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/pets", petRoutes);
+app.use("/api/pets", petRoutes); //
 
 const getUser = async (req, res) => {
   try {
@@ -30,6 +30,8 @@ const getUser = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+app.get("/api/auth/me", authenticate, getUser);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
