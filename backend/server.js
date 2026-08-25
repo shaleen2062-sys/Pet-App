@@ -6,6 +6,7 @@ const authController = require("./controllers/authController");
 const authenticate = require("./middleware/authMiddleware");
 const authRoutes = require("./routes/authRoutes");
 const petRoutes = require("./routes/petRoutes");
+const cors = require("cors");
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
@@ -15,6 +16,7 @@ mongoose
   .catch((error) => console.error("MongoDB connection error:", error));
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
