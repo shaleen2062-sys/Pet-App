@@ -72,7 +72,7 @@ function LoginPage() {
 
       localStorage.setItem("token", response.data.token);
 
-      navigate("/", {
+      navigate("/selection", {
         replace: true,
       });
     } catch (err) {

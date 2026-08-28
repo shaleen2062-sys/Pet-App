@@ -3,6 +3,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import NavBar from "./components/NavBar";
 import "./App.css";
+import PetSetup from "./pages/petSetup";
+import PetDashboard from "./pages/PetDashboard";
 
 function App() {
   return (
@@ -15,6 +17,11 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         <Route path="/register" element={<RegisterPage />} />
+
+        <Route path="/selection" element={<PetSetup/>} />
+
+        <Route path="/home" element={<PetDashboard/>} />
+
       </Routes>
     </BrowserRouter>
   );
