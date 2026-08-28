@@ -75,8 +75,7 @@ function LoginPage() {
       // Store token using AuthContext
       login(response.data.token);
 
-      // Redirect after successful login
-      navigate("/", {
+      navigate("/selection", {
         replace: true,
       });
     } catch (err) {
