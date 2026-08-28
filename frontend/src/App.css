@@ -32,28 +32,39 @@ body {
 }
 
 
-/* =========================================
-   PIXEL NAVBAR
-========================================= */
+/* ========================================= 
+   PIXEL NAVBAR 
+========================================= */ 
+ 
+.pixel-navbar { 
+  width: 100%; 
+  min-height: 78px; 
+ 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-start; 
+ 
+  padding: 10px 45px; 
+ 
+  background: #dff3ff; 
+ 
+  border-bottom: 4px solid #8ecae6; 
+ 
+  position: relative; 
+  z-index: 100; 
+} 
 
-.pixel-navbar {
-  width: 100%;
-  min-height: 78px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 10px 45px;
-
-  background: #dff3ff;
-
-  border-bottom: 4px solid #8ecae6;
-
-  position: relative;
-  z-index: 100;
+.pixel-navbar > .pixel-nav-link:first-child {
+  margin-right: auto;
 }
 
+.pixel-navbar > .pixel-nav-link:nth-child(2) {
+  margin-left: 0;
+}
+
+.pixel-navbar > .pixel-nav-link:nth-child(3) {
+  margin-left: 12px;
+}
 
 /* Brand */
 
@@ -174,13 +185,13 @@ body {
 /* Logout */
 
 .pixel-nav-logout {
-  background: #f6c9ef;
+  background: #c8f7b5;
 
-  border-color: #9c4e8f;
+  border-color: #397d55;
 
-  color: #71356a;
+  color: #245c38;
 
-  box-shadow: 3px 3px 0 #9c4e8f;
+  box-shadow: 3px 3px 0 #397d55;
 }
 
 .pixel-nav-logout:hover {

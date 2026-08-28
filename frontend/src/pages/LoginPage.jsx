@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { API_BASE } from "../api";
+import { useAuth } from "../context/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [form, setForm] = useState({
     email: "",
@@ -70,8 +72,10 @@ function LoginPage() {
         password: form.password,
       });
 
-      localStorage.setItem("token", response.data.token);
+      // Store token using AuthContext
+      login(response.data.token);
 
+      // Redirect after successful login
       navigate("/", {
         replace: true,
       });
@@ -184,7 +188,6 @@ function LoginPage() {
 
           <div className="pixel-auth-switch">
             <span>NEW PET OWNER?</span>
-
             <Link to="/register">REGISTER →</Link>
           </div>
         </section>

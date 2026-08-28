@@ -4,15 +4,20 @@ const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required."],
       unique: true,
       trim: true,
       lowercase: true,
+      match: [
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        "Please enter a valid email address.",
+      ],
     },
 
     password: {
       type: String,
-      required: true,
+      required: [true, "Password is required."],
+      minlength: [6, "Password must be at least 6 characters."],
     },
   },
   {

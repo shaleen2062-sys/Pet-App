@@ -22,19 +22,6 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/pets", petRoutes); //
 
-const getUser = async (req, res) => {
-  try {
-    res.status(200).json({
-      id: req.user._id,
-      email: req.user.email,
-    });
-  } catch (e) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-app.get("/api/auth/me", authenticate, getUser);
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server live on port ${PORT}`);
