@@ -1,6 +1,7 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import {API_BASE} from "../api";
+import { API_BASE } from "../api";
+import { useNavigate } from "react-router";
 
 import catImage from "../assets/pets/cat_normalState.png";
 import dogImage from "../assets/pets/dog_normalState.png";
@@ -22,364 +23,300 @@ import parkImage from "../assets/background/park.jpg";
 import beachImage from "../assets/background/beach.jpg";
 import nightImage from "../assets/background/night.jpg";
 
-function PetDashboard(){
-    const [pet,setPet] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-    const [action, setAction] = useState("normal");
+function PetDashboard() {
+  const navigate = useNavigate();
+  const [pet, setPet] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [action, setAction] = useState("normal");
 
-    async function fetchPet(){
-        try{
-            const token = localStorage.getItem("token");
-            const response = await axios.get(`${API_BASE}/pets`,{
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+  async function fetchPet() {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_BASE}/pets`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-            setPet(response.data);
-        }catch(err){
-            console.error("Failed to fetch Pet:",err);
-            if (err.response){
-                setError(err.response.data.message || "could not load pet.");
-            }else{
-                setError("could not reach the server")
-            }
-        }finally{
-            setLoading(false);
+      setPet(response.data);
+    } catch (err) {
+      console.error("Failed to fetch Pet:", err);
+
+      if (err.response) {
+        if (err.response.status === 404) {
+          navigate("/pet-setup", { replace: true });
+          return;
         }
+
+        setError(err.response.data.message || "could not load pet.");
+      } else {
+        setError("could not reach the server");
+      }
+    } finally {
+      setLoading(false);
     }
-    useEffect(()=>{
-        fetchPet();
-    },[]);
+  }
+  useEffect(() => {
+    fetchPet();
+  }, []);
 
-    async function feedPet() {
-        const token = localStorage.getItem("token");
-        try {
-            const response = await axios.put(`${API_BASE}/pets/feed`,{},
-            {
-                headers: {
-                Authorization: `Bearer ${token}`,
-                },
-            }
-            );
+  async function feedPet() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `${API_BASE}/pets/feed`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-            setPet(response.data);
+      setPet(response.data);
 
-            setAction("eating");
+      setAction("eating");
 
-            setTimeout(() => {
-            setAction("normal");
-            }, 1500);
+      setTimeout(() => {
+        setAction("normal");
+      }, 1500);
+    } catch (err) {
+      console.error("Failed to feed pet:", err);
 
-        } catch (err) {
-            console.error("Failed to feed pet:", err);
-
-            if (err.response) {
-            setError(
-                err.response.data.message || "Could not feed pet."
-            );
-            } else {
-            setError("Could not reach the server.");
-            }
-        }
+      if (err.response) {
+        setError(err.response.data.message || "Could not feed pet.");
+      } else {
+        setError("Could not reach the server.");
+      }
     }
+  }
 
-    async function playPet() {
-        const token = localStorage.getItem("token");
-        try {
-            const response = await axios.put(`${API_BASE}/pets/play`,{},
-            {
-                headers: {
-                Authorization: `Bearer ${token}`,},
-            }
-            );
+  async function playPet() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `${API_BASE}/pets/play`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-            setPet(response.data);
+      setPet(response.data);
 
-            setAction("playing");
+      setAction("playing");
 
-            setTimeout(() => {
-            setAction("normal");
-            }, 1500);
+      setTimeout(() => {
+        setAction("normal");
+      }, 1500);
+    } catch (err) {
+      console.error("Failed to play with pet:", err);
 
-        } catch (err) {
-            console.error("Failed to play with pet:", err);
-
-            if (err.response) {
-            setError(
-                err.response.data.message ||
-                "Could not play with pet."
-            );
-            } else {
-            setError("Could not reach the server.");
-            }
-        }
+      if (err.response) {
+        setError(err.response.data.message || "Could not play with pet.");
+      } else {
+        setError("Could not reach the server.");
+      }
     }
+  }
 
-    async function sleepPet() {
-        const token = localStorage.getItem("token");
-        try {
-            const response = await axios.put(`${API_BASE}/pets/sleep`,{},
-            {
-                headers: {
-                Authorization: `Bearer ${token}`,},
-            }
-            );
+  async function sleepPet() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `${API_BASE}/pets/sleep`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-            setPet(response.data);
+      setPet(response.data);
 
-            setAction("sleeping");
+      setAction("sleeping");
 
-            setTimeout(() => {
-            setAction("normal");
-            }, 1500);
+      setTimeout(() => {
+        setAction("normal");
+      }, 1500);
+    } catch (err) {
+      console.error("Failed to put pet to sleep:", err);
 
-        } catch (err) {
-            console.error("Failed to put pet to sleep:", err);
-
-            if (err.response) {
-            setError(
-                err.response.data.message ||
-                "Could not put pet to sleep."
-            );
-            } else {
-            setError("Could not reach the server.");
-            }
-        }
+      if (err.response) {
+        setError(err.response.data.message || "Could not put pet to sleep.");
+      } else {
+        setError("Could not reach the server.");
+      }
     }
+  }
 
-    function getPetImage() {
-        if (pet.type === "cat") {
-            if (action === "eating") {
-            return catEatImage;
-            }
+  function getPetImage() {
+    if (pet.type === "cat") {
+      if (action === "eating") {
+        return catEatImage;
+      }
 
-            if (action === "playing") {
-            return catPlayImage;
-            }
+      if (action === "playing") {
+        return catPlayImage;
+      }
 
-            if (action === "sleeping") {
-            return catSleepImage;
-            }
-            return catImage;
-        }
-    
-
-        if (pet.type === "dog") {
-            if (action === "eating") {
-            return dogEatImage;
-            }
-
-            if (action === "playing") {
-            return dogPlayImage;
-            }
-
-            if (action === "sleeping") {
-            return dogSleepImage;
-            }
-            return dogImage;
-        }
-
-        if (pet.type === "bunny") {
-            if (action === "eating") {
-            return bunnyEatImage;
-            }
-
-            if (action === "playing") {
-            return bunnyPlayImage;
-            }
-
-            if (action === "sleeping") {
-            return bunnySleepImage;
-            }
-
-            return bunnyImage;
-        }
-        return null;
+      if (action === "sleeping") {
+        return catSleepImage;
+      }
+      return catImage;
     }
 
-    function getBackgroundImage() {
+    if (pet.type === "dog") {
+      if (action === "eating") {
+        return dogEatImage;
+      }
 
-        if (pet.background === "park") {
-            return parkImage;
-        }
+      if (action === "playing") {
+        return dogPlayImage;
+      }
 
-        if (pet.background === "beach") {
-            return beachImage;
-        }
-
-        if (pet.background === "night") {
-            return nightImage;
-        }
-
-        return parkImage;
+      if (action === "sleeping") {
+        return dogSleepImage;
+      }
+      return dogImage;
     }
 
+    if (pet.type === "bunny") {
+      if (action === "eating") {
+        return bunnyEatImage;
+      }
 
+      if (action === "playing") {
+        return bunnyPlayImage;
+      }
 
-    if (loading) {
-        return <p>LOADING YOUR PET...</p>;
+      if (action === "sleeping") {
+        return bunnySleepImage;
+      }
+
+      return bunnyImage;
+    }
+    return null;
+  }
+
+  function getBackgroundImage() {
+    if (pet.background === "park") {
+      return parkImage;
     }
 
-    if (error && !pet) {
-        return (
-            <div className="pet-dashboard-page">
-                <div className="pet-game-container">
-                    <p className="dashboard-message">
-                        {error}
-                    </p>
-                </div>
-            </div>
-        );
+    if (pet.background === "beach") {
+      return beachImage;
     }
 
+    if (pet.background === "night") {
+      return nightImage;
+    }
+
+    return parkImage;
+  }
+
+  if (loading) {
+    return <p>LOADING YOUR PET...</p>;
+  }
+
+  if (error && !pet) {
     return (
-
-        <div className="pet-dashboard-page">
-
-            <div className="pet-game-container">
-
-                <div className="dashboard-header">
-
-                    <div className="dashboard-decoration">
-                        ♡ ♡ ♡
-                    </div>
-
-                    <h1>PET CONTROLLER</h1>
-
-                    <p>YOUR PIXEL PET COMPANION</p>
-
-                </div>
-
-                <div className="pet-name-display">
-
-                    <span className="pet-name-label">
-                        YOUR PET
-                    </span>
-
-                    <h2>{pet.name}</h2>
-
-                    <div className="pet-hearts">
-                        ♥ ♥ ♥
-                    </div>
-
-                </div>
-
-                <div
-                    className="pet-game-scene"
-                    style={{
-                        backgroundImage: `url(${getBackgroundImage()})`
-                    }}
-                >
-
-                    <div className="pet-character">
-
-                        <img
-                            src={getPetImage()}
-                            alt={pet.type}
-                        />
-
-                    </div>
-
-                </div>
-
-                <div className="pet-status">
-
-                    <div className="status-row">
-
-                        <div className="status-label">
-                            HUNGER
-                        </div>
-
-                        <div className="status-bar">
-
-                            <div
-                                className="status-fill hunger-fill"
-                                style={{
-                                    width: `${pet.hunger}%`
-                                }}
-                            ></div>
-
-                        </div>
-
-                        <div className="status-value">
-                            {pet.hunger}
-                        </div>
-
-                    </div>
-
-                    <div className="status-row">
-
-                        <div className="status-label">
-                            ENERGY
-                        </div>
-
-                        <div className="status-bar">
-
-                            <div
-                                className="status-fill energy-fill"
-                                style={{
-                                    width: `${pet.energy}%`
-                                }}
-                            ></div>
-
-                        </div>
-
-                        <div className="status-value">
-                            {pet.energy}
-                        </div>
-
-                    </div>
-
-                </div>
-
-                {error && (
-
-                    <div className="dashboard-error">
-                        {error}
-                    </div>
-
-                )}
-
-                <div className="pet-actions">
-
-                    <button
-                        type="button"
-                        className="pet-action-button"
-                        onClick={feedPet}
-                    >FEED
-                    </button>
-
-                    <button
-                        type="button"
-                        className="pet-action-button"
-                        onClick={playPet}
-                    >
-                        PLAY
-                    </button>
-
-                    <button
-                        type="button"
-                        className="pet-action-button"
-                        onClick={sleepPet}
-                    >
-                        SLEEP
-                    </button>
-
-                </div>
-
-                <div className="dashboard-footer">
-                    <span>
-                        TYPE: {pet.type.toUpperCase()}
-                    </span>
-                    <span>
-                        WORLD: {pet.background.toUpperCase()}
-                    </span>
-                </div>
-            </div>
+      <div className="pet-dashboard-page">
+        <div className="pet-game-container">
+          <p className="dashboard-message">{error}</p>
         </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="pet-dashboard-page">
+      <div className="pixel-cloud pixel-cloud-1"></div>
+      <div className="pixel-cloud pixel-cloud-2"></div>
+      <div className="pet-game-container">
+        <div className="dashboard-header"></div>
+
+        <div className="pet-name-display">
+          <span className="pet-name-label">YOUR PET</span>
+
+          <h2>{pet.name}</h2>
+          <div className="pet-hearts">♥ ♥ ♥</div>
+        </div>
+
+        <div
+          className="pet-game-scene"
+          style={{
+            backgroundImage: `url(${getBackgroundImage()})`,
+          }}
+        >
+          <div className="pet-character">
+            <img src={getPetImage()} alt={pet.type} />
+          </div>
+        </div>
+
+        <div className="pet-status">
+          <div className="status-row">
+            <div className="status-label">HUNGER</div>
+
+            <div className="status-bar">
+              <div
+                className="status-fill hunger-fill"
+                style={{
+                  width: `${pet.hunger}%`,
+                }}
+              ></div>
+            </div>
+
+            <div className="status-value">{pet.hunger}</div>
+          </div>
+
+          <div className="status-row">
+            <div className="status-label">ENERGY</div>
+
+            <div className="status-bar">
+              <div
+                className="status-fill energy-fill"
+                style={{
+                  width: `${pet.energy}%`,
+                }}
+              ></div>
+            </div>
+
+            <div className="status-value">{pet.energy}</div>
+          </div>
+        </div>
+
+        {error && <div className="dashboard-error">{error}</div>}
+
+        <div className="pet-actions">
+          <button type="button" className="pet-action-button" onClick={feedPet}>
+            FEED
+          </button>
+
+          <button type="button" className="pet-action-button" onClick={playPet}>
+            PLAY
+          </button>
+
+          <button
+            type="button"
+            className="pet-action-button"
+            onClick={sleepPet}
+          >
+            SLEEP
+          </button>
+        </div>
+
+        <div className="dashboard-footer">
+          <span>TYPE: {pet.type.toUpperCase()}</span>
+          <span>WORLD: {pet.background.toUpperCase()}</span>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default PetDashboard;

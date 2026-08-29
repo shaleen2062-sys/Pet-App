@@ -57,7 +57,6 @@ function LoginPage() {
     e.preventDefault();
 
     const validationErrors = validateForm();
-
     setErrors(validationErrors);
 
     if (validationErrors.email || validationErrors.password) {
@@ -72,12 +71,40 @@ function LoginPage() {
         password: form.password,
       });
 
-      // Store token using AuthContext
-      login(response.data.token);
+      const token = response.data.token;
 
-      navigate("/selection", {
-        replace: true,
-      });
+      // Store token
+      login(token);
+
+      // Check if this user already has a pet
+      try {
+        const petResponse = await axios.get(`${API_BASE}/pets`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Pet exists → go to home
+        if (petResponse.data) {
+          navigate("/home", {
+            replace: true,
+          });
+        }
+      } catch (petError) {
+        // No pet → go to pet setup
+        if (petError.response?.status === 404) {
+          navigate("/pet-setup", {
+            replace: true,
+          });
+        } else {
+          console.error("Failed to check pet:", petError);
+
+          setErrors({
+            email: "",
+            password: "Could not check your pet. Please try again.",
+          });
+        }
+      }
     } catch (err) {
       if (err.response) {
         const message = err.response.data.message || "Login failed.";
