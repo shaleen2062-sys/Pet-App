@@ -3,17 +3,31 @@ const Pet = require("../models/pet");
 const createPet = async (req, res) => {
   try {
     const { name, type, background } = req.body;
+
     if (!name || !type) {
       return res
         .status(400)
         .json({ message: "Name and Pet Type are required" });
     }
+
+    // Check if the logged-in user already has a pet
+    const existingPet = await Pet.findOne({
+      userId: req.user._id,
+    });
+
+    if (existingPet) {
+      return res.status(400).json({
+        message: "Pet already exists for the user",
+      });
+    }
+
     const newPet = await Pet.create({
       userId: req.user._id,
       name,
       type,
       background,
     });
+
     res.status(201).json(newPet);
   } catch (error) {
     console.error(error);
@@ -64,9 +78,9 @@ const feedPet = async (req, res) => {
     return res.status(200).json(pet);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      message: error.message || "Something Went Wrong",
-    });
+    return res
+      .status(500)
+      .json({ message: error.message || "Something Went Wrong" });
   }
 };
 
@@ -75,7 +89,6 @@ const playPet = async (req, res) => {
     const pet = await Pet.findOne({
       userId: req.user._id,
     });
-
     if (!pet) {
       return res.status(404).json({ message: "Pet Not Found" });
     }
@@ -83,8 +96,8 @@ const playPet = async (req, res) => {
       return res.status(400).json({ message: "Your pet is too tired to play" });
     }
 
-    pet.hunger = Math.min(pet.hunger - 20, 100);
-    pet.energy = Math.min(pet.energy - 20, 100);
+    pet.hunger = Math.max(pet.hunger - 20, 0);
+    pet.energy = Math.max(pet.energy - 20, 0);
     await pet.save();
     return res.status(200).json(pet);
   } catch (error) {
@@ -111,6 +124,8 @@ const sleepPet = async (req, res) => {
 
     pet.hunger = Math.min(pet.hunger - 20, 100);
     pet.energy = Math.min(pet.energy + 20, 100);
+    await pet.save();
+    return res.status(200).json(pet);
   } catch (error) {
     console.error(error);
     return res
@@ -118,7 +133,6 @@ const sleepPet = async (req, res) => {
       .json({ message: error.message || "Something Went Wrong" });
   }
 };
-
 module.exports = {
   createPet,
   getPet,
