@@ -36,7 +36,7 @@ function PetSetup() {
             Authorization: `Bearer ${token}`,
           },
         });
-        
+
         const pet = response.data;
 
         setPetName(pet.name);
@@ -59,27 +59,33 @@ function PetSetup() {
   async function handlePetSubmit() {
     if (!petType || !background || !petName.trim()) {
       setError("Please complete all pet details.");
-
       return;
     }
+
     try {
       const token = localStorage.getItem("token");
-      let response;
-      if (editing) {`${API_BASE}/pets`,
-        {
-          name: petName.trim(),
-          type: petType,
-          background: background,
-        },
-        {
-          headers: {
-          Authorization: `Bearer ${token}`,
-          },
-        },
-        
-        console.log("Pet updated:", response.data);
 
+      let response;
+
+      if (editing) {
+        // UPDATE existing pet
+        response = await axios.put(
+          `${API_BASE}/pets`,
+          {
+            name: petName.trim(),
+            type: petType,
+            background: background,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        console.log("Pet updated:", response.data);
       } else {
+        // CREATE new pet
         response = await axios.post(
           `${API_BASE}/pets`,
           {
@@ -96,6 +102,7 @@ function PetSetup() {
 
         console.log("Pet created:", response.data);
       }
+
       navigate("/home", {
         replace: true,
       });

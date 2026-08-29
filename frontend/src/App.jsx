@@ -14,7 +14,12 @@ function App() {
       <NavBar />
 
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route
+          path="/"
+          element={
+            isLoggedIn ? <PetDashboard /> : <Navigate to="/register" replace />
+          }
+        />
 
         <Route path="/login" element={<LoginPage />} />
 

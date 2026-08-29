@@ -142,7 +142,6 @@ function PetDashboard() {
       setTimeout(() => {
         setAction("normal");
       }, 1500);
-
     } catch (err) {
       console.error("Failed to put pet to sleep:", err);
 
@@ -155,36 +154,33 @@ function PetDashboard() {
   }
 
   async function deletePet() {
-    const confirmed = window.confirm("Are you sure you want to delete your pet?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete your pet?",
+    );
     if (!confirmed) {
-        return;
+      return;
     }
     const token = localStorage.getItem("token");
 
     try {
-        await axios.delete(`${API_BASE}/pets`,
-        {
-            headers: {
-            Authorization: `Bearer ${token}`
-            }
-        }
-        );
+      await axios.delete(`${API_BASE}/pets`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        navigate("/pet-setup", { replace: true });
-
+      navigate("/pet-setup", { replace: true });
     } catch (err) {
-        console.error("Failed to delete pet:", err);
+      console.error("Failed to delete pet:", err);
 
-        if (err.response) {
-        setError(
-            err.response.data.message || "Could not delete pet."
-        );
-        } else {
+      if (err.response) {
+        setError(err.response.data.message || "Could not delete pet.");
+      } else {
         setError("Could not reach the server.");
-        }
+      }
     }
-    }
-    
+  }
+
   function getPetImage() {
     if (pet.type === "cat") {
       if (action === "eating") {
@@ -342,15 +338,22 @@ function PetDashboard() {
         </div>
 
         <div className="pet-management">
-        <button type="button" className="pet-management-button" onClick={() => { navigate("/pet-setup", { state: {editing: true}});}}>
-            EDIT PET
-        </button>
-        <button
+          <button
             type="button"
-            className="pet-management-button delete-button"
-            onClick={deletePet}>
+            className="pet-action-button"
+            onClick={() => {
+              navigate("/pet-setup", { state: { editing: true } });
+            }}
+          >
+            EDIT PET
+          </button>
+          <button
+            type="button"
+            className="pet-action-button"
+            onClick={deletePet}
+          >
             DELETE PET
-        </button>
+          </button>
         </div>
         <div className="dashboard-footer">
           <span>TYPE: {pet.type.toUpperCase()}</span>
