@@ -73,10 +73,8 @@ function LoginPage() {
 
       const token = response.data.token;
 
-      // Store token
       login(token);
 
-      // Check if this user already has a pet
       try {
         const petResponse = await axios.get(`${API_BASE}/pets`, {
           headers: {
@@ -84,14 +82,12 @@ function LoginPage() {
           },
         });
 
-        // Pet exists → go to home
         if (petResponse.data) {
           navigate("/home", {
             replace: true,
           });
         }
       } catch (petError) {
-        // No pet → go to pet setup
         if (petError.response?.status === 404) {
           navigate("/pet-setup", {
             replace: true,
@@ -134,9 +130,7 @@ function LoginPage() {
 
         <div className="pixel-auth-header">
           <h1 className="pixel-title">
-            PET
-            <br />
-            CONTROLLER
+            PIXEL PAWS
           </h1>
 
           <p className="pixel-subtitle">YOUR PIXEL PET COMPANION</p>

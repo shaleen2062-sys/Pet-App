@@ -10,7 +10,6 @@ const createPet = async (req, res) => {
         .json({ message: "Name and Pet Type are required" });
     }
 
-    // Check if the logged-in user already has a pet
     const existingPet = await Pet.findOne({
       userId: req.user._id,
     });
@@ -54,6 +53,72 @@ const getPet = async (req, res) => {
 
     return res.status(500).json({
       message: error.message || "Something went wrong",
+    });
+  }
+};
+
+const updatePet = async (req, res) => {
+  try {
+    const { name, type, background } = req.body;
+
+    const pet = await Pet.findOne({
+      userId: req.user._id
+    });
+
+    if (!pet) {
+      return res.status(404).json({
+        message: "Pet not found"
+      });
+    }
+
+    if (name !== undefined) {
+      pet.name = name.trim();
+    }
+
+    if (type !== undefined) {
+      pet.type = type;
+    }
+
+    if (background !== undefined) {
+      pet.background = background;
+    }
+
+    await pet.save();
+
+    return res.status(200).json(pet);
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to update pet",
+      error: error.message
+    });
+  }
+};
+
+const deletePet = async (req, res) => {
+  try {
+    const pet = await Pet.findOne({
+      userId: req.user._id
+    });
+
+    if (!pet) {
+      return res.status(404).json({
+        message: "Pet not found"
+      });
+    }
+
+    await Pet.deleteOne({
+      _id: pet._id
+    });
+
+    return res.status(200).json({
+      message: "Pet deleted successfully"
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to delete pet",
+      error: error.message
     });
   }
 };
@@ -139,4 +204,6 @@ module.exports = {
   feedPet,
   sleepPet,
   playPet,
+  deletePet,
+  updatePet
 };

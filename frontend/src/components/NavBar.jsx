@@ -13,7 +13,7 @@ function NavBar() {
   return (
     <nav className="pixel-navbar">
       <Link to="/home" className="pixel-nav-link">
-        PIXEL PAWS
+        🐾 PIXEL PAWS
       </Link>
 
       {isLoggedIn ? (

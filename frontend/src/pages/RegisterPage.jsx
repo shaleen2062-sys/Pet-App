@@ -112,9 +112,7 @@ function RegisterPage() {
 
         <div className="pixel-auth-header">
           <h1 className="pixel-title">
-            PET
-            <br />
-            CONTROLLER
+            PIXEL PAWS
           </h1>
 
           <p className="pixel-subtitle">CREATE YOUR PIXEL PET WORLD</p>
