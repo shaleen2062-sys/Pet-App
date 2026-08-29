@@ -6,6 +6,7 @@ const petSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      unique: true,
     },
 
     name: {
@@ -16,13 +17,13 @@ const petSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: ["cat", "dog", "duck", "panda", "penguin"],
+      enum: ["cat", "dog", "bunny"],
       required: true,
     },
 
     background: {
       type: String,
-      enum: ["forest", "beach", "Stars", "garden", "normal"],
+      enum: ["park", "beach", "night", "normal"],
       default: "normal",
     },
 
