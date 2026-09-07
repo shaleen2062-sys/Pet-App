@@ -78,8 +78,7 @@ function PetDashboard() {
       setAction("eating");
 
       setTimeout(() => {
-        setAction("normal");
-      }, 1500);
+        setAction("normal");}, 3000);
     } catch (err) {
       console.error("Failed to feed pet:", err);
 
@@ -109,8 +108,7 @@ function PetDashboard() {
       setAction("playing");
 
       setTimeout(() => {
-        setAction("normal");
-      }, 1500);
+        setAction("normal");}, 30000);
     } catch (err) {
       console.error("Failed to play with pet:", err);
 
@@ -140,8 +138,7 @@ function PetDashboard() {
       setAction("sleeping");
 
       setTimeout(() => {
-        setAction("normal");
-      }, 1500);
+        setAction("normal");}, 3000);
     } catch (err) {
       console.error("Failed to put pet to sleep:", err);
 
