@@ -108,7 +108,7 @@ function PetDashboard() {
       setAction("playing");
 
       setTimeout(() => {
-        setAction("normal");}, 30000);
+        setAction("normal");}, 3000);
     } catch (err) {
       console.error("Failed to play with pet:", err);
 
